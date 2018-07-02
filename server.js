@@ -25,12 +25,13 @@ mongoose.connect(dbConfig.url)
     process.exit();
 });
 
-// define a simple route
-app.get('/', (req, res) => {
-    res.json({"message": "Welcome to Contract Manager application."});
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
-require('./app/routes/index.js')(app);
+require('./app/routes')(app);
 
 // listen for requests
 app.listen(3000, () => {

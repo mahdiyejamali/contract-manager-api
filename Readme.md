@@ -1,4 +1,4 @@
-# EasyNotes Application
+# Contract Manager API
 
 Build a Restful CRUD API using Node.js, Express and MongoDB.
 

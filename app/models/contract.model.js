@@ -11,25 +11,25 @@ const ContractSchema = mongoose.Schema({
     type: String,
     required: 'Contract content is required'
   },
-  status: {
+  stage: {
     //'SIGN_PENDING', 'REVIEW_PENDING', 'NEGOTIATION', 'EXECUTED'
     type: String,
-    required: 'Contract status is required'
+    default: 'SIGN_PENDING'
   },
   owner_id: {
-    type: Number,
+    type: String,
     required: 'Owner Id is required'
   },
   client_id: {
-    type: Number,
+    type: String,
     required: 'Client Id is required'
   },
   reviewer_id: {
-    type: Number,
+    type: String,
     required: 'Reviewer Id is required'
   },
   executor_id: {
-    type: Number,
+    type: String,
     required: 'Executor Id is required'
   },
   signed_at: {
@@ -37,7 +37,7 @@ const ContractSchema = mongoose.Schema({
     default: null
   },
   approved_by: {
-    type: Number,
+    type: String,
     default: null
   },
   approved_at: {
@@ -45,7 +45,7 @@ const ContractSchema = mongoose.Schema({
     default: null
   },
   executed_by: {
-    type: Number,
+    type: String,
     default: null
   },
   executed_at: {

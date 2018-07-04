@@ -1,4 +1,30 @@
 const Contract = require('../models/contract.model.js');
+var nodemailer = require('nodemailer');
+
+sendEMail = (data) => {
+  // send email
+  var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'mahdiye.jamali68@gmail.com',
+        pass: 'xxxxx'
+      }
+  });
+  var mailOptions = {
+      from: 'mahdiye.jamali68@gmail.com',
+      to: 'mahdiye@gumgum.com',
+      subject: 'Sending Email using Node.js',
+      text: 'Test Sending Email!' + data
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+          console.log(error);
+      } else {
+          console.log('Email sent: ' + info.response);
+      }
+  });
+}
 
 // Create and Save a new Contract
 exports.create = (req, res) => {
@@ -15,6 +41,8 @@ exports.create = (req, res) => {
     // Save contract in the database
     contract.save()
     .then(data => {
+        // Send an email with a link to contract to contract's client
+        sendEMail(data);
         res.send(data);
     }).catch(err => {
         res.status(500).send({

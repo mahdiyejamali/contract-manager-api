@@ -7,9 +7,53 @@ const ContractSchema = mongoose.Schema({
     type: String,
     required: 'Contract name is required'
   },
-  content: {
+  entity_name: {
     type: String,
-    required: 'Contract content is required'
+    required: 'Entity name is required'
+  },
+  mailing_address: {
+    type: String,
+    required: 'Mailing Address is required'
+  },
+  primary_contact_name: {
+    type: String,
+    required: 'Primary Contract name is required'
+  },
+  primary_contact_title: {
+    type: String,
+    required: 'Primary Contract Title is required'
+  },
+  primary_contact_phone: {
+    type: String,
+    required: 'Primary Contract Phone is required'
+  },
+  primary_contact_email: {
+    type: String,
+    required: 'Primary Contract Email is required'
+  },
+  billing_contact: {
+    type: String,
+    required: 'Billing Contract is required'
+  },
+  billing_phone: {
+    type: String,
+    required: 'Billing Phone is required'
+  },
+  billing_email: {
+    type: String,
+    required: 'Billing Email is required'
+  },
+  services: {
+    type: String,
+    required: 'Services is required'
+  },
+  valuation_period: {
+    type: String,
+    required: 'Valuation Period is required'
+  },
+  total_fee: {
+    type: String,
+    required: 'Total Fee is required'
   },
   stage: {
     //'SIGN_PENDING', 'REVIEW_PENDING', 'NEGOTIATION', 'EXECUTED'

@@ -7,49 +7,13 @@ const ContractSchema = mongoose.Schema({
     type: String,
     required: 'Contract name is required'
   },
-  entity_name: {
+  start_date: {
     type: String,
-    required: 'Entity name is required'
+    required: 'Start Date is required'
   },
-  mailing_address: {
+  end_date: {
     type: String,
-    required: 'Mailing Address is required'
-  },
-  primary_contact_name: {
-    type: String,
-    required: 'Primary Contract name is required'
-  },
-  primary_contact_title: {
-    type: String,
-    required: 'Primary Contract Title is required'
-  },
-  primary_contact_phone: {
-    type: String,
-    required: 'Primary Contract Phone is required'
-  },
-  primary_contact_email: {
-    type: String,
-    required: 'Primary Contract Email is required'
-  },
-  billing_contact: {
-    type: String,
-    required: 'Billing Contract is required'
-  },
-  billing_phone: {
-    type: String,
-    required: 'Billing Phone is required'
-  },
-  billing_email: {
-    type: String,
-    required: 'Billing Email is required'
-  },
-  services: {
-    type: String,
-    required: 'Services is required'
-  },
-  valuation_period: {
-    type: String,
-    required: 'Valuation Period is required'
+    required: 'End Date is required'
   },
   total_fee: {
     type: String,
@@ -58,7 +22,7 @@ const ContractSchema = mongoose.Schema({
   stage: {
     //'SIGN_PENDING', 'REVIEW_PENDING', 'NEGOTIATION', 'EXECUTED'
     type: String,
-    default: 'SIGN_PENDING'
+    default: 'PENDING_CLIENT_SIGN'
   },
   owner_id: {
     type: String,
@@ -68,27 +32,75 @@ const ContractSchema = mongoose.Schema({
     type: String,
     required: 'Client Id is required'
   },
-  reviewer_id: {
-    type: String,
-    required: 'Reviewer Id is required'
-  },
   executor_id: {
     type: String,
     required: 'Executor Id is required'
+  },
+  deliverables: {
+    type: String,
+    required: 'Deliverables is required'
+  },
+  entity_name: {
+    type: String,
+    default: null
+  },
+  mailing_address: {
+    type: String,
+    default: null
+  },
+  contact_name: {
+    type: String,
+    default: null
+  },
+  contact_title: {
+    type: String,
+    default: null
+  },
+  contact_phone: {
+    type: String,
+    default: null
+  },
+  contact_email: {
+    type: String,
+    default: null
+  },
+  billing_contact: {
+    type: String,
+    default: null
+  },
+  billing_phone: {
+    type: String,
+    default: null
+  },
+  billing_email: {
+    type: String,
+    default: null
+  },
+  signed_by: {
+    type: String,
+    default: null
+  },
+  client_printed_name: {
+    type: String,
+    default: null
+  },
+  client_title: {
+    type: String,
+    default: null
   },
   signed_at: {
     type: Date,
     default: null
   },
-  approved_by: {
+  executed_by: {
     type: String,
     default: null
   },
-  approved_at: {
-    type: Date,
+  executor_printed_name: {
+    type: String,
     default: null
   },
-  executed_by: {
+  executor_title: {
     type: String,
     default: null
   },

@@ -1,7 +1,12 @@
 const Contract = require('../models/contract.model.js');
 var nodemailer = require('nodemailer');
+const CONTRACT_MANAGER = 'http://localhost:3001';
 
-sendEMail = (data) => {
+const PENDING_CLIENT_SIGN = 'PENDING_CLIENT_SIGN';
+const PENDING_FINAL_SIGN = 'PENDING_FINAL_SIGN';
+const EXECUTED = 'EXECUTED';
+
+sendEMail = (data, stage = PENDING_CLIENT_SIGN) => {
   // send email
   var transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -10,12 +15,29 @@ sendEMail = (data) => {
         pass: 'xxxxx'
       }
   });
-  var mailOptions = {
-      from: 'mahdiye.jamali68@gmail.com',
-      to: 'mahdiye@gumgum.com',
-      subject: 'Sending Email using Node.js',
-      text: 'Test Sending Email!' + data
-  };
+  if (stage === PENDING_CLIENT_SIGN) {
+    var mailOptions = {
+        from: 'mahdiye.jamali68@gmail.com',
+        to: 'mahdiye@gumgum.com',
+        subject: 'Contract Waiting for Signature',
+        text: 'Please check and sign the attached contract. ' + CONTRACT_MANAGER + '/contract/' + data._id
+    };
+  } else if (stage === PENDING_FINAL_SIGN) {
+    var mailOptions = {
+        from: 'mahdiye.jamali68@gmail.com',
+        to: 'mahdiye@gumgum.com',
+        subject: 'Contract Waiting for Final Signature',
+        text: 'Please check and sign the attached contract. ' + CONTRACT_MANAGER + '/contract/' + data._id
+    };
+  } else if (stage === EXECUTED) {
+    var mailOptions = {
+        from: 'mahdiye.jamali68@gmail.com',
+        to: 'mahdiye@gumgum.com',
+        subject: 'Contract Executed',
+        text: 'The following contract was executed. ' + CONTRACT_MANAGER + '/contract/' + data._id
+    };
+  }
+
 
   transporter.sendMail(mailOptions, function(error, info){
       if (error) {
@@ -31,7 +53,7 @@ exports.create = (req, res) => {
     // Validate request
     if(!req.body.name) {
         return res.status(400).send({
-            message: "Contract content can not be empty"
+            message: "Contract name can not be empty"
         });
     }
 
@@ -70,14 +92,14 @@ exports.findOne = (req, res) => {
         if(!contract) {
             return res.status(404).send({
                 message: "Contract not found with id " + req.params.contractId
-            });            
+            });
         }
         res.send(contract);
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
                 message: "Contract not found with id " + req.params.contractId
-            });                
+            });
         }
         return res.status(500).send({
             message: "Error retrieving contract with id " + req.params.contractId
@@ -88,26 +110,29 @@ exports.findOne = (req, res) => {
 // Update a contract identified by the contractId in the request
 exports.update = (req, res) => {
     // Validate Request
-    if(!req.body.content) {
+    if(!req.body.name) {
         return res.status(400).send({
-            message: "Contract content can not be empty"
+            message: "Contract name can not be empty"
         });
     }
 
     // Find Contract and update it with the request body
-    Contract.findByIdAndUpdate(req.params.contractId, req.body, {new: true})
+    Contract.findByIdAndUpdate(req.params.contractId, req.body)
     .then(contract => {
         if(!contract) {
             return res.status(404).send({
                 message: "Contract not found with id " + req.params.contractId
             });
         }
+        // Send an email with a link to involved users after contract gets signed
+        sendEMail(contract, req.body.stage);
         res.send(contract);
     }).catch(err => {
+        console.log(err);
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
                 message: "Contract not found with id " + req.params.contractId
-            });                
+            });
         }
         return res.status(500).send({
             message: "Error updating contract with id " + req.params.contractId
@@ -129,7 +154,7 @@ exports.delete = (req, res) => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
                 message: "Contract not found with id " + req.params.contractId
-            });                
+            });
         }
         return res.status(500).send({
             message: "Could not delete contract with id " + req.params.contractId

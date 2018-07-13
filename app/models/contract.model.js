@@ -36,10 +36,6 @@ const ContractSchema = mongoose.Schema({
     type: String,
     required: 'Executor Id is required'
   },
-  deliverables: {
-    type: String,
-    required: 'Deliverables is required'
-  },
   entity_name: {
     type: String,
     default: null

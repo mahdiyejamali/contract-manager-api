@@ -3,6 +3,7 @@ var nodemailer = require('nodemailer');
 const CONTRACT_MANAGER = 'http://localhost:3001';
 
 const PENDING_CLIENT_SIGN = 'PENDING_CLIENT_SIGN';
+const IN_REVIEW = 'IN_REVIEW';
 const PENDING_FINAL_SIGN = 'PENDING_FINAL_SIGN';
 const EXECUTED = 'EXECUTED';
 
@@ -12,29 +13,36 @@ sendEMail = (data, stage = PENDING_CLIENT_SIGN) => {
       service: 'gmail',
       auth: {
         user: 'mahdiye.jamali68@gmail.com',
-        pass: 'xxxxx'
+        pass: 'xxxxxx'
       }
   });
   if (stage === PENDING_CLIENT_SIGN) {
     var mailOptions = {
         from: 'mahdiye.jamali68@gmail.com',
         to: 'mahdiye@gumgum.com',
-        subject: 'Contract Waiting for Signature',
+        subject: 'Contract Pending Client Signature',
         text: 'Please check and sign the attached contract. ' + CONTRACT_MANAGER + '/contract/' + data._id
     };
   } else if (stage === PENDING_FINAL_SIGN) {
     var mailOptions = {
         from: 'mahdiye.jamali68@gmail.com',
         to: 'mahdiye@gumgum.com',
-        subject: 'Contract Waiting for Final Signature',
+        subject: 'Contract Pending Final Signature',
         text: 'Please check and sign the attached contract. ' + CONTRACT_MANAGER + '/contract/' + data._id
+    };
+  } else if (stage === IN_REVIEW) {
+    var mailOptions = {
+        from: 'mahdiye.jamali68@gmail.com',
+        to: 'mahdiye@gumgum.com',
+        subject: 'Contract Waiting for Review',
+        text: 'Please check and review the attached contract. ' + CONTRACT_MANAGER + '/contract/' + data._id
     };
   } else if (stage === EXECUTED) {
     var mailOptions = {
         from: 'mahdiye.jamali68@gmail.com',
         to: 'mahdiye@gumgum.com',
-        subject: 'Contract Executed',
-        text: 'The following contract was executed. ' + CONTRACT_MANAGER + '/contract/' + data._id
+        subject: 'Contract Executed!',
+        text: 'The following contract was executed! ' + CONTRACT_MANAGER + '/contract/' + data._id
     };
   }
 
@@ -56,6 +64,8 @@ exports.create = (req, res) => {
             message: "Contract name can not be empty"
         });
     }
+
+    console.log(req.body);
 
     // Create a Contract
     const contract = new Contract(req.body);
